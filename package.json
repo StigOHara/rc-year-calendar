@@ -1,24 +1,31 @@
 {
   "name": "rc-year-calendar",
-  "version": "1.0.2",
-  "description": "Official react wrapper for the year-calendar widget",
-  "main": "./dist/rc-year-calendar.js",
-  "scripts": {
-    "watch": "rollup -c --watch",
-    "clean": "rimraf dist && rimraf locales",
-    "build": "npm run clean && rollup -c && npm run build:locales",
-    "build:locales": "cpy node_modules/js-year-calendar/locales/* locales && renamer --find js-year-calendar --replace rc-year-calendar locales/*",
-    "prepare": "npm run build",
-    "test": "echo 'No tests implemented'"
+  "version": "1.0.3",
+  "description": "Official React wrapper for the year-calendar widget",
+  "main": "./dist/rc-year-calendar.umd.js",
+  "module": "./dist/rc-year-calendar.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/rc-year-calendar.es.js",
+      "require": "./dist/rc-year-calendar.umd.js"
+    }
   },
-  "pre-commit": [
-    "build",
-    "test"
-  ],
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rimraf dist",
+    "prepare": "npm run build"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/year-calendar/rc-year-calendar.git"
+    "url": "git+https://github.com/StigOHara/rc-year-calendar.git"
   },
+  "bugs": {
+    "url": "https://github.com/StigOHara/rc-year-calendar/issues"
+  },
+  "homepage": "https://github.com/StigOHara/rc-year-calendar#readme",
   "keywords": [
     "calendar",
     "year",
@@ -27,33 +34,21 @@
     "react"
   ],
   "author": "Paul-DS",
+  "contributors": [
+    "StigOHara"
+  ],
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/year-calendar/rc-year-calendar/issues"
-  },
-  "homepage": "https://year-calendar.github.io/",
   "dependencies": {
     "js-year-calendar": "^2.0.0"
   },
   "peerDependencies": {
-    "prop-types": "^15.7.2",
-    "react": "^17.0.2"
+    "prop-types": "^15.8.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.8",
-    "@babel/core": "^7.15.0",
-    "@babel/plugin-proposal-class-properties": "^7.14.5",
-    "@babel/plugin-transform-modules-umd": "^7.14.5",
-    "@babel/plugin-transform-react-jsx": "^7.14.9",
-    "@babel/preset-env": "^7.15.0",
-    "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^20.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
-    "cpy-cli": "^3.1.1",
-    "renamer": "^2.0.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.56.3",
-    "rollup-plugin-postcss": "^4.0.1",
-    "rollup-plugin-terser": "^7.0.2"
+    "@vitejs/plugin-react": "^4.5.0",
+    "rimraf": "^5.0.5",
+    "vite": "^6.3.5"
   }
 }

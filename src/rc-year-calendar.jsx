@@ -100,10 +100,10 @@ export default class Calendar extends React.Component {
 
     compare(a, b) {
         if (typeof a === "function" && typeof b === "function") {
-            return a.toString() != b.toString();
+            return a.toString() !== b.toString();
         }
         else if (a instanceof Date && b instanceof Date) {
-            return a.getTime() != b.getTime();
+            return a.getTime() !== b.getTime();
         }
         else if (a !== null && typeof a === "object" && b !== null && typeof b === "object") {
             var aKeys = Object.keys(a);
@@ -117,7 +117,7 @@ export default class Calendar extends React.Component {
             }
         }
         else {
-            return a != b;
+            return a !== b;
         }
     }
 
@@ -130,7 +130,7 @@ export default class Calendar extends React.Component {
         const cal = this.JsCalendar;
         const ops = [];
 
-        // opsions
+        // options
         if (this.compare(nextProps.allowOverlap, this.props.allowOverlap)) ops.push(() => cal.setAllowOverlap(nextProps.allowOverlap));
         if (this.compare(nextProps.alwaysHalfDay, this.props.alwaysHalfDay)) ops.push(() => cal.setAlwaysHalfDay(nextProps.alwaysHalfDay, true));
         if (this.compare(nextProps.contextMenuItems, this.props.contextMenuItems)) ops.push(() => cal.setContextMenuItems(nextProps.contextMenuItems, true));
@@ -169,7 +169,7 @@ export default class Calendar extends React.Component {
         if (ops.length > 0) {
             ops.forEach(op => op());
 
-            if (nextProps.year == this.props.year && nextProps.startDate == this.props.startDate) {
+            if (nextProps.year === this.props.year && nextProps.startDate === this.props.startDate) {
                 // If the year has changed, the calendar has automatically been rendered
                 cal.render();
             }
