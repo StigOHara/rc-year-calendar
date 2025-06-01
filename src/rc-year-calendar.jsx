@@ -41,7 +41,7 @@ export default function Calendar(props) {
             // Event handlers
             onDayClick: props.onDayClick,
             onDayContextMenu: props.onDayContextMenu,
-            onDayenter: props.onDayEnter,
+            onDayEnter: props.onDayEnter,
             onDayLeave: props.onDayLeave,
             onRenderEnd: props.onRenderEnd,
             onSelectRange: props.onSelectRange,
