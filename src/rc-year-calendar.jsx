@@ -1,246 +1,160 @@
-import React from "react";
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import JsCalendar from "js-year-calendar";
+import JsCalendar from 'js-year-calendar';
+import isEqual from 'lodash.isequal';
+
 import 'js-year-calendar/dist/js-year-calendar.css';
 
-export default class Calendar extends React.Component {
-    static propTypes = {
-        // options
-        allowOverlap: PropTypes.bool,
-        alwaysHalfDay: PropTypes.bool,
-        contextMenuItems: PropTypes.arrayOf(PropTypes.shape({
-            text: PropTypes.string,
-            click: PropTypes.func,
-            visible: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
-            items: PropTypes.array
-        })),
-        customDayRenderer: PropTypes.func,
-        customDataSourceRenderer: PropTypes.func,
-        dataSource: PropTypes.oneOfType([
-            PropTypes.arrayOf(PropTypes.shape({
-                startDate: PropTypes.instanceOf(Date),
-                endDate: PropTypes.instanceOf(Date),
-                name: PropTypes.string
-            })), 
-            PropTypes.func
-        ]),
-        disabledDays: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-        disabledWeekDays: PropTypes.arrayOf(PropTypes.number),
-        displayDisabledDataSource: PropTypes.bool,
-        displayHeader: PropTypes.bool,
-        displayWeekNumber: PropTypes.bool,
-        enableContextMenu: PropTypes.bool,
-        enableRangeSelection: PropTypes.bool,
-        hiddenWeekDays: PropTypes.arrayOf(PropTypes.number),
-        language: PropTypes.string,
-        loadingTemplate: PropTypes.string,
-        maxDate: PropTypes.instanceOf(Date),
-        minDate: PropTypes.instanceOf(Date),
-        roundRangeLimits: PropTypes.bool,
-        selectRange: PropTypes.bool,
-        style: PropTypes.string,
-        weekStart: PropTypes.number,
-        year: PropTypes.number,
+export default function Calendar(props) {
+    const containerRef = useRef(null);
+    const calendarRef = useRef(null);
+    const prevProps = useRef({});
 
-        // Events
-        onDayClick: PropTypes.func,
-        onDayContextMenu: PropTypes.func,
-        onDayEnter: PropTypes.func,
-        onDayLeave: PropTypes.func,
-        onRenderEnd: PropTypes.func,
-        onSelectRange: PropTypes.func,
-        onYearChanged: PropTypes.func
-    };
+    useEffect(() => {
+        const options = {
+            allowOverlap: props.allowOverlap,
+            alwaysHalfDay: props.alwaysHalfDay,
+            contextMenuItems: props.contextMenuItems,
+            customDayRenderer: props.customDayRenderer,
+            customDataSourceRenderer: props.customDataSourceRenderer,
+            dataSource: props.dataSource,
+            disabledDays: props.disabledDays,
+            disabledWeekDays: props.disabledWeekDays,
+            displayDisabledDataSource: props.displayDisabledDataSource,
+            displayHeader: props.displayHeader,
+            displayWeekNumber: props.displayWeekNumber,
+            enableContextMenu: props.enableContextMenu,
+            enableRangeSelection: props.enableRangeSelection,
+            hiddenWeekDays: props.hiddenWeekDays,
+            language: props.language,
+            loadingTemplate: props.loadingTemplate,
+            maxDate: props.maxDate,
+            minDate: props.minDate,
+            roundRangeLimits: props.roundRangeLimits,
+            selectRange: props.selectRange,
+            style: props.style,
+            weekStart: props.weekStart,
+            numberMonthsDisplayed: props.numberMonthsDisplayed,
+            startYear: props.year ?? props.defaultYear,
+            startDate: props.startDate ?? props.defaultStartDate,
 
-    static locales = JsCalendar.locales; // Map the "locales" property to the js-year-calendar "locales" property, in order to make the locale files compatible
+            // Event handlers
+            onDayClick: props.onDayClick,
+            onDayContextMenu: props.onDayContextMenu,
+            onDayenter: props.onDayEnter,
+            onDayLeave: props.onDayLeave,
+            onRenderEnd: props.onRenderEnd,
+            onSelectRange: props.onSelectRange,
+            onPeriodChanged: props.onPeriodChanged,
+            onYearChanged: props.onYearChanged
+        };
 
-    constructor(props) {
-        super(props);
-    }
+        calendarRef.current = new JsCalendar(containerRef.current, options);
 
-    componentDidMount() {
-        this.JsCalendar = new JsCalendar(this.container, {
-            // opsions
-            allowOverlap: this.props.allowOverlap,
-            alwaysHalfDay: this.props.alwaysHalfDay,
-            contextMenuItems: this.props.contextMenuItems,
-            customDayRenderer: this.props.customDayRenderer,
-            customDataSourceRenderer: this.props.customDataSourceRenderer,
-            dataSource: this.props.dataSource,
-            disabledDays: this.props.disabledDays,
-            disabledWeekDays: this.props.disabledWeekDays,
-            displayDisabledDataSource: this.props.displayDisabledDataSource,
-            displayHeader: this.props.displayHeader,
-            displayWeekNumber: this.props.displayWeekNumber,
-            enableContextMenu: this.props.enableContextMenu,
-            enableRangeSelection: this.props.enableRangeSelection,
-            hiddenWeekDays: this.props.hiddenWeekDays,
-            language: this.props.language,
-            loadingTemplate: this.props.loadingTemplate,
-            maxDate: this.props.maxDate,
-            minDate: this.props.minDate,
-            roundRangeLimits: this.props.roundRangeLimits,
-            style: this.props.style,
-            weekStart: this.props.weekStart,
-            numberMonthsDisplayed: this.props.numberMonthsDisplayed,
-            startYear: this.props.year != null ? this.props.year : this.props.defaultYear,
-            startDate: this.props.startDate != null ? this.props.startDate : this.props.defaultStartDate,
-
-            // Events
-            clickDay: this.props.onDayClick,
-            dayContextMenu: this.props.onDayContextMenu,
-            mouseOnDay: this.props.onDayEnter,
-            mouseOutDay: this.props.onDayLeave,
-            renderEnd: this.props.onRenderEnd,
-            selectRange: this.props.onRangeSelected,
-            periodChanged: this.props.onPeriodChanged,
-            yearChanged: this.props.onYearChanged
-        });
-    }
-
-    compare(a, b) {
-        if (typeof a === "function" && typeof b === "function") {
-            return a.toString() !== b.toString();
-        }
-        else if (a instanceof Date && b instanceof Date) {
-            return a.getTime() !== b.getTime();
-        }
-        else if (a !== null && typeof a === "object" && b !== null && typeof b === "object") {
-            var aKeys = Object.keys(a);
-            var bKeys = Object.keys(b);
-            
-            if (aKeys.length !== bKeys.length) {
-                return true;
+        return () => {
+            // Proper cleanup
+            if (calendarRef.current) {
+                calendarRef.current.dispose?.();
+                containerRef.current.innerHTML = '';
             }
-            else {
-                return aKeys.some(key => this.compare(a[key], b[key]));
-            }
-        }
-        else {
-            return a !== b;
-        }
-    }
+        };
+    }, []);
 
-    updateEvent(eventName, oldListener, newListener) {
-        this.container.removeEventListener(eventName, oldListener);
-        this.container.addEventListener(eventName, newListener);
-    }
+    useEffect(() => {
+        if (!calendarRef.current) return;
 
-    componentWillReceiveProps(nextProps) {
-        const cal = this.JsCalendar;
         const ops = [];
 
-        // options
-        if (this.compare(nextProps.allowOverlap, this.props.allowOverlap)) {
-            ops.push(() => cal.setAllowOverlap(nextProps.allowOverlap));
-        }
-        if (this.compare(nextProps.alwaysHalfDay, this.props.alwaysHalfDay)) {
-            ops.push(() => cal.setAlwaysHalfDay(nextProps.alwaysHalfDay, true));
-        }
-        if (this.compare(nextProps.contextMenuItems, this.props.contextMenuItems)) {
-            ops.push(() => cal.setContextMenuItems(nextProps.contextMenuItems, true));
-        }
-        if (this.compare(nextProps.customDayRenderer, this.props.customDayRenderer)) {
-            ops.push(() => cal.setCustomDayRenderer(nextProps.customDayRenderer, true));
-        }
-        if (this.compare(nextProps.customDataSourceRenderer, this.props.customDataSourceRenderer)) {
-            ops.push(() => cal.setCustomDataSourceRenderer(nextProps.customDataSourceRenderer, true));
-        }
-        if (this.compare(nextProps.dataSource, this.props.dataSource)) {
-            ops.push(() => cal.setDataSource(nextProps.dataSource, true));
-        }
-        if (this.compare(nextProps.disabledDays, this.props.disabledDays)) {
-            ops.push(() => cal.setDisabledDays(nextProps.disabledDays, true));
-        }
-        if (this.compare(nextProps.disabledWeekDays, this.props.disabledWeekDays)) {
-            ops.push(() => cal.setDisabledWeekDays(nextProps.disabledWeekDays, true));
-        }
-        if (this.compare(nextProps.displayDisabledDataSource, this.props.displayDisabledDataSource)) {
-            ops.push(() => cal.setDisplayDisabledDataSource(nextProps.displayDisabledDataSource, true));
-        }
-        if (this.compare(nextProps.displayHeader, this.props.displayHeader)) {
-            ops.push(() => cal.setDisplayHeader(nextProps.displayHeader, true));
-        }
-        if (this.compare(nextProps.displayWeekNumber, this.props.displayWeekNumber)) {
-            ops.push(() => cal.setDisplayWeekNumber(nextProps.displayWeekNumber, true));
-        }
-        if (this.compare(nextProps.enableContextMenu, this.props.enableContextMenu)) {
-            ops.push(() => cal.setEnableContextMenu(nextProps.enableContextMenu, true));
-        }
-        if (this.compare(nextProps.enableRangeSelection, this.props.enableRangeSelection)) {
-            ops.push(() => cal.setEnableRangeSelection(nextProps.enableRangeSelection, true));
-        }
-        if (this.compare(nextProps.hiddenWeekDays, this.props.hiddenWeekDays)) {
-            ops.push(() => cal.setHiddenWeekDays(nextProps.hiddenWeekDays, true));
-        }
-        if (this.compare(nextProps.language, this.props.language)) {
-            ops.push(() => cal.setLanguage(nextProps.language, true));
-        }
-        if (this.compare(nextProps.loadingTemplate, this.props.loadingTemplate)) {
-            ops.push(() => cal.setLoadingTemplate(nextProps.loadingTemplate, true));
-        }
-        if (this.compare(nextProps.maxDate, this.props.maxDate)) {
-            ops.push(() => cal.setMaxDate(nextProps.maxDate, true));
-        }
-        if (this.compare(nextProps.minDate, this.props.minDate)) {
-            ops.push(() => cal.setMinDate(nextProps.minDate, true));
-        }
-        if (this.compare(nextProps.roundRangeLimits, this.props.roundRangeLimits)) {
-            ops.push(() => cal.setRoundRangeLimits(nextProps.roundRangeLimits, true));
-        }
-        if (this.compare(nextProps.style, this.props.style)) {
-            ops.push(() => cal.setStyle(nextProps.style, true));
-        }
-        if (this.compare(nextProps.weekStart, this.props.weekStart)) {
-            ops.push(() => cal.setWeekStart(nextProps.weekStart, true));
-        }
-        if (this.compare(nextProps.numberMonthsDisplayed, this.props.numberMonthsDisplayed)) {
-            ops.push(() => cal.setWeekStart(nextProps.numberMonthsDisplayed, true));
-        }
-        if (this.compare(nextProps.startDate, this.props.startDate)) {
-            ops.push(() => cal.setStartDate(nextProps.startDate));
-        }
-        if (this.compare(nextProps.year, this.props.year)) ops.push(() => cal.setYear(nextProps.year));
+        const compareProp = (key, fn) => {
+            if (!isEqual(props[key], prevProps.current[key])) {
+                ops.push(() => fn(props[key]));
+            }
+        };
 
-        // Events
-        if (this.compare(nextProps.onDayClick, this.props.onDayClick)) {
-            this.updateEvent('clickDay', this.props.onDayClick, nextProps.onDayClick);
-        }
-        if (this.compare(nextProps.onDayContextMenu, this.props.onDayContextMenu)) {
-            this.updateEvent('dayContextMenu', this.props.onDayContextMenu, nextProps.onDayContextMenu);
-        }
-        if (this.compare(nextProps.onDayEnter, this.props.onDayEnter)) {
-            this.updateEvent('mouseOnDay', this.props.onDayEnter, nextProps.onDayEnter);
-        }
-        if (this.compare(nextProps.onDayLeave, this.props.onDayLeave)) {
-            this.updateEvent('mouseOutDay', this.props.onDayLeave, nextProps.onDayLeave);
-        }
-        if (this.compare(nextProps.onRenderEnd, this.props.onRenderEnd)) {
-            this.updateEvent('renderEnd', this.props.onRenderEnd, nextProps.onRenderEnd);
-        }
-        if (this.compare(nextProps.onRangeSelected, this.props.onRangeSelected)) {
-            this.updateEvent('selectRange', this.props.onRangeSelected, nextProps.onRangeSelected);
-        }
-        if (this.compare(nextProps.onPeriodChanged, this.props.onPeriodChanged)) {
-            this.updateEvent('periodChanged', this.props.onPeriodChanged, nextProps.onPeriodChanged);
-        }
-        if (this.compare(nextProps.onYearChanged, this.props.onYearChanged)) {
-            this.updateEvent('yearChanged', this.props.onYearChanged, nextProps.onYearChanged);
-        }
+        compareProp('allowOverlap', v => calendarRef.current.setAllowOverlap(v));
+        compareProp('alwaysHalfDay', v => calendarRef.current.setAlwaysHalfDay(v, true));
+        compareProp('contextMenuItems', v => calendarRef.current.setContextMenuItems(v, true));
+        compareProp('customDayRenderer', v => calendarRef.current.setCustomDayRenderer(v, true));
+        compareProp('customDataSourceRenderer', v => calendarRef.current.setCustomDataSourceRenderer(v, true));
+        compareProp('dataSource', v => calendarRef.current.setDataSource(v, true));
+        compareProp('disabledDays', v => calendarRef.current.setDisabledDays(v, true));
+        compareProp('disabledWeekDays', v => calendarRef.current.setDisabledWeekDays(v, true));
+        compareProp('displayDisabledDataSource', v => calendarRef.current.setDisplayDisabledDataSource(v, true));
+        compareProp('displayHeader', v => calendarRef.current.setDisplayHeader(v, true));
+        compareProp('displayWeekNumber', v => calendarRef.current.setDisplayWeekNumber(v, true));
+        compareProp('enableContextMenu', v => calendarRef.current.setEnableContextMenu(v, true));
+        compareProp('enableRangeSelection', v => calendarRef.current.setEnableRangeSelection(v, true));
+        compareProp('hiddenWeekDays', v => calendarRef.current.setHiddenWeekDays(v, true));
+        compareProp('language', v => calendarRef.current.setLanguage(v, true));
+        compareProp('loadingTemplate', v => calendarRef.current.setLoadingTemplate(v, true));
+        compareProp('maxDate', v => calendarRef.current.setMaxDate(v, true));
+        compareProp('minDate', v => calendarRef.current.setMinDate(v, true));
+        compareProp('roundRangeLimits', v => calendarRef.current.setRoundRangeLimits(v, true));
+        compareProp('style', v => calendarRef.current.setStyle(v, true));
+        compareProp('weekStart', v => calendarRef.current.setWeekStart(v, true));
+        compareProp('numberMonthsDisplayed', v => calendarRef.current.setNumberMonthsDisplayed?.(v, true));
+        compareProp('startDate', v => calendarRef.current.setStartDate?.(v));
+        compareProp('year', v => calendarRef.current.setYear?.(v));
 
         if (ops.length > 0) {
-            ops.forEach(op => op());
-
-            if (nextProps.year === this.props.year && nextProps.startDate === this.props.startDate) {
-                // If the year has changed, the calendar has automatically been rendered
-                cal.render();
-            }
+            ops.forEach(fn => fn());
         }
-    }
 
-    render() {
-        return (
-            <div ref={elt => this.container = elt}></div>
-        );
-    }
+        prevProps.current = props;
+    }, [props]);
+
+    return <div ref={containerRef}></div>;
 }
+
+Calendar.locales = JsCalendar.locales;
+
+Calendar.propTypes = {
+    allowOverlap: PropTypes.bool,
+    alwaysHalfDay: PropTypes.bool,
+    contextMenuItems: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string,
+        click: PropTypes.func,
+        visible: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+        items: PropTypes.array
+    })),
+    customDayRenderer: PropTypes.func,
+    customDataSourceRenderer: PropTypes.func,
+    dataSource: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.shape({
+            startDate: PropTypes.instanceOf(Date),
+            endDate: PropTypes.instanceOf(Date),
+            name: PropTypes.string
+        })),
+        PropTypes.func
+    ]),
+    disabledDays: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+    disabledWeekDays: PropTypes.arrayOf(PropTypes.number),
+    displayDisabledDataSource: PropTypes.bool,
+    displayHeader: PropTypes.bool,
+    displayWeekNumber: PropTypes.bool,
+    enableContextMenu: PropTypes.bool,
+    enableRangeSelection: PropTypes.bool,
+    hiddenWeekDays: PropTypes.arrayOf(PropTypes.number),
+    language: PropTypes.string,
+    loadingTemplate: PropTypes.string,
+    maxDate: PropTypes.instanceOf(Date),
+    minDate: PropTypes.instanceOf(Date),
+    roundRangeLimits: PropTypes.bool,
+    selectRange: PropTypes.bool,
+    style: PropTypes.string,
+    weekStart: PropTypes.number,
+    numberMonthsDisplayed: PropTypes.number,
+    year: PropTypes.number,
+    defaultYear: PropTypes.number,
+    startDate: PropTypes.instanceOf(Date),
+    defaultStartDate: PropTypes.instanceOf(Date),
+
+    onDayClick: PropTypes.func,
+    onDayContextMenu: PropTypes.func,
+    onDayEnter: PropTypes.func,
+    onDayLeave: PropTypes.func,
+    onRenderEnd: PropTypes.func,
+    onSelectRange: PropTypes.func,
+    onPeriodChanged: PropTypes.func,
+    onYearChanged: PropTypes.func
+};
