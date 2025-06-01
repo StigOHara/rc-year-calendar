@@ -4,8 +4,8 @@ import JsCalendar from "js-year-calendar";
 import 'js-year-calendar/dist/js-year-calendar.css';
 
 export default class Calendar extends React.Component {
-    static propsTypes = {
-        // opsions
+    static propTypes = {
+        // options
         allowOverlap: PropTypes.bool,
         alwaysHalfDay: PropTypes.bool,
         contextMenuItems: PropTypes.arrayOf(PropTypes.shape({
@@ -131,40 +131,102 @@ export default class Calendar extends React.Component {
         const ops = [];
 
         // options
-        if (this.compare(nextProps.allowOverlap, this.props.allowOverlap)) ops.push(() => cal.setAllowOverlap(nextProps.allowOverlap));
-        if (this.compare(nextProps.alwaysHalfDay, this.props.alwaysHalfDay)) ops.push(() => cal.setAlwaysHalfDay(nextProps.alwaysHalfDay, true));
-        if (this.compare(nextProps.contextMenuItems, this.props.contextMenuItems)) ops.push(() => cal.setContextMenuItems(nextProps.contextMenuItems, true));
-        if (this.compare(nextProps.customDayRenderer, this.props.customDayRenderer)) ops.push(() => cal.setCustomDayRenderer(nextProps.customDayRenderer, true));
-        if (this.compare(nextProps.customDataSourceRenderer, this.props.customDataSourceRenderer)) ops.push(() => cal.setCustomDataSourceRenderer(nextProps.customDataSourceRenderer, true));
-        if (this.compare(nextProps.dataSource, this.props.dataSource)) ops.push(() => cal.setDataSource(nextProps.dataSource, true));
-        if (this.compare(nextProps.disabledDays, this.props.disabledDays)) ops.push(() => cal.setDisabledDays(nextProps.disabledDays, true));
-        if (this.compare(nextProps.disabledWeekDays, this.props.disabledWeekDays)) ops.push(() => cal.setDisabledWeekDays(nextProps.disabledWeekDays, true));
-        if (this.compare(nextProps.displayDisabledDataSource, this.props.displayDisabledDataSource)) ops.push(() => cal.setDisplayDisabledDataSource(nextProps.displayDisabledDataSource, true));
-        if (this.compare(nextProps.displayHeader, this.props.displayHeader)) ops.push(() => cal.setDisplayHeader(nextProps.displayHeader, true));
-        if (this.compare(nextProps.displayWeekNumber, this.props.displayWeekNumber)) ops.push(() => cal.setDisplayWeekNumber(nextProps.displayWeekNumber, true));
-        if (this.compare(nextProps.enableContextMenu, this.props.enableContextMenu)) ops.push(() => cal.setEnableContextMenu(nextProps.enableContextMenu, true));
-        if (this.compare(nextProps.enableRangeSelection, this.props.enableRangeSelection)) ops.push(() => cal.setEnableRangeSelection(nextProps.enableRangeSelection, true));
-        if (this.compare(nextProps.hiddenWeekDays, this.props.hiddenWeekDays)) ops.push(() => cal.setHiddenWeekDays(nextProps.hiddenWeekDays, true));
-        if (this.compare(nextProps.language, this.props.language)) ops.push(() => cal.setLanguage(nextProps.language, true));
-        if (this.compare(nextProps.loadingTemplate, this.props.loadingTemplate)) ops.push(() => cal.setLoadingTemplate(nextProps.loadingTemplate, true));
-        if (this.compare(nextProps.maxDate, this.props.maxDate)) ops.push(() => cal.setMaxDate(nextProps.maxDate, true));
-        if (this.compare(nextProps.minDate, this.props.minDate)) ops.push(() => cal.setMinDate(nextProps.minDate, true));
-        if (this.compare(nextProps.roundRangeLimits, this.props.roundRangeLimits)) ops.push(() => cal.setRoundRangeLimits(nextProps.roundRangeLimits, true));
-        if (this.compare(nextProps.style, this.props.style)) ops.push(() => cal.setStyle(nextProps.style, true));
-        if (this.compare(nextProps.weekStart, this.props.weekStart)) ops.push(() => cal.setWeekStart(nextProps.weekStart, true));
-        if (this.compare(nextProps.numberMonthsDisplayed, this.props.numberMonthsDisplayed)) ops.push(() => cal.setWeekStart(nextProps.numberMonthsDisplayed, true));
-        if (this.compare(nextProps.startDate, this.props.startDate)) ops.push(() => cal.setStartDate(nextProps.startDate));
+        if (this.compare(nextProps.allowOverlap, this.props.allowOverlap)) {
+            ops.push(() => cal.setAllowOverlap(nextProps.allowOverlap));
+        }
+        if (this.compare(nextProps.alwaysHalfDay, this.props.alwaysHalfDay)) {
+            ops.push(() => cal.setAlwaysHalfDay(nextProps.alwaysHalfDay, true));
+        }
+        if (this.compare(nextProps.contextMenuItems, this.props.contextMenuItems)) {
+            ops.push(() => cal.setContextMenuItems(nextProps.contextMenuItems, true));
+        }
+        if (this.compare(nextProps.customDayRenderer, this.props.customDayRenderer)) {
+            ops.push(() => cal.setCustomDayRenderer(nextProps.customDayRenderer, true));
+        }
+        if (this.compare(nextProps.customDataSourceRenderer, this.props.customDataSourceRenderer)) {
+            ops.push(() => cal.setCustomDataSourceRenderer(nextProps.customDataSourceRenderer, true));
+        }
+        if (this.compare(nextProps.dataSource, this.props.dataSource)) {
+            ops.push(() => cal.setDataSource(nextProps.dataSource, true));
+        }
+        if (this.compare(nextProps.disabledDays, this.props.disabledDays)) {
+            ops.push(() => cal.setDisabledDays(nextProps.disabledDays, true));
+        }
+        if (this.compare(nextProps.disabledWeekDays, this.props.disabledWeekDays)) {
+            ops.push(() => cal.setDisabledWeekDays(nextProps.disabledWeekDays, true));
+        }
+        if (this.compare(nextProps.displayDisabledDataSource, this.props.displayDisabledDataSource)) {
+            ops.push(() => cal.setDisplayDisabledDataSource(nextProps.displayDisabledDataSource, true));
+        }
+        if (this.compare(nextProps.displayHeader, this.props.displayHeader)) {
+            ops.push(() => cal.setDisplayHeader(nextProps.displayHeader, true));
+        }
+        if (this.compare(nextProps.displayWeekNumber, this.props.displayWeekNumber)) {
+            ops.push(() => cal.setDisplayWeekNumber(nextProps.displayWeekNumber, true));
+        }
+        if (this.compare(nextProps.enableContextMenu, this.props.enableContextMenu)) {
+            ops.push(() => cal.setEnableContextMenu(nextProps.enableContextMenu, true));
+        }
+        if (this.compare(nextProps.enableRangeSelection, this.props.enableRangeSelection)) {
+            ops.push(() => cal.setEnableRangeSelection(nextProps.enableRangeSelection, true));
+        }
+        if (this.compare(nextProps.hiddenWeekDays, this.props.hiddenWeekDays)) {
+            ops.push(() => cal.setHiddenWeekDays(nextProps.hiddenWeekDays, true));
+        }
+        if (this.compare(nextProps.language, this.props.language)) {
+            ops.push(() => cal.setLanguage(nextProps.language, true));
+        }
+        if (this.compare(nextProps.loadingTemplate, this.props.loadingTemplate)) {
+            ops.push(() => cal.setLoadingTemplate(nextProps.loadingTemplate, true));
+        }
+        if (this.compare(nextProps.maxDate, this.props.maxDate)) {
+            ops.push(() => cal.setMaxDate(nextProps.maxDate, true));
+        }
+        if (this.compare(nextProps.minDate, this.props.minDate)) {
+            ops.push(() => cal.setMinDate(nextProps.minDate, true));
+        }
+        if (this.compare(nextProps.roundRangeLimits, this.props.roundRangeLimits)) {
+            ops.push(() => cal.setRoundRangeLimits(nextProps.roundRangeLimits, true));
+        }
+        if (this.compare(nextProps.style, this.props.style)) {
+            ops.push(() => cal.setStyle(nextProps.style, true));
+        }
+        if (this.compare(nextProps.weekStart, this.props.weekStart)) {
+            ops.push(() => cal.setWeekStart(nextProps.weekStart, true));
+        }
+        if (this.compare(nextProps.numberMonthsDisplayed, this.props.numberMonthsDisplayed)) {
+            ops.push(() => cal.setWeekStart(nextProps.numberMonthsDisplayed, true));
+        }
+        if (this.compare(nextProps.startDate, this.props.startDate)) {
+            ops.push(() => cal.setStartDate(nextProps.startDate));
+        }
         if (this.compare(nextProps.year, this.props.year)) ops.push(() => cal.setYear(nextProps.year));
 
         // Events
-        if (this.compare(nextProps.onDayClick, this.props.onDayClick)) this.updateEvent('clickDay', this.props.onDayClick, nextProps.onDayClick);
-        if (this.compare(nextProps.onDayContextMenu, this.props.onDayContextMenu)) this.updateEvent('dayContextMenu', this.props.onDayContextMenu, nextProps.onDayContextMenu);
-        if (this.compare(nextProps.onDayEnter, this.props.onDayEnter)) this.updateEvent('mouseOnDay', this.props.onDayEnter, nextProps.onDayEnter);
-        if (this.compare(nextProps.onDayLeave, this.props.onDayLeave)) this.updateEvent('mouseOutDay', this.props.onDayLeave, nextProps.onDayLeave);
-        if (this.compare(nextProps.onRenderEnd, this.props.onRenderEnd)) this.updateEvent('renderEnd', this.props.onRenderEnd, nextProps.onRenderEnd);
-        if (this.compare(nextProps.onRangeSelected, this.props.onRangeSelected)) this.updateEvent('selectRange', this.props.onRangeSelected, nextProps.onRangeSelected);
-        if (this.compare(nextProps.onPeriodChanged, this.props.onPeriodChanged)) this.updateEvent('periodChanged', this.props.onPeriodChanged, nextProps.onPeriodChanged);
-        if (this.compare(nextProps.onYearChanged, this.props.onYearChanged)) this.updateEvent('yearChanged', this.props.onYearChanged, nextProps.onYearChanged);
+        if (this.compare(nextProps.onDayClick, this.props.onDayClick)) {
+            this.updateEvent('clickDay', this.props.onDayClick, nextProps.onDayClick);
+        }
+        if (this.compare(nextProps.onDayContextMenu, this.props.onDayContextMenu)) {
+            this.updateEvent('dayContextMenu', this.props.onDayContextMenu, nextProps.onDayContextMenu);
+        }
+        if (this.compare(nextProps.onDayEnter, this.props.onDayEnter)) {
+            this.updateEvent('mouseOnDay', this.props.onDayEnter, nextProps.onDayEnter);
+        }
+        if (this.compare(nextProps.onDayLeave, this.props.onDayLeave)) {
+            this.updateEvent('mouseOutDay', this.props.onDayLeave, nextProps.onDayLeave);
+        }
+        if (this.compare(nextProps.onRenderEnd, this.props.onRenderEnd)) {
+            this.updateEvent('renderEnd', this.props.onRenderEnd, nextProps.onRenderEnd);
+        }
+        if (this.compare(nextProps.onRangeSelected, this.props.onRangeSelected)) {
+            this.updateEvent('selectRange', this.props.onRangeSelected, nextProps.onRangeSelected);
+        }
+        if (this.compare(nextProps.onPeriodChanged, this.props.onPeriodChanged)) {
+            this.updateEvent('periodChanged', this.props.onPeriodChanged, nextProps.onPeriodChanged);
+        }
+        if (this.compare(nextProps.onYearChanged, this.props.onYearChanged)) {
+            this.updateEvent('yearChanged', this.props.onYearChanged, nextProps.onYearChanged);
+        }
 
         if (ops.length > 0) {
             ops.forEach(op => op());
