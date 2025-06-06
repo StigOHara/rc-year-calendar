@@ -156,7 +156,7 @@ Calendar.propTypes = {
     onDayEnter: PropTypes.func,
     onDayLeave: PropTypes.func,
     onRenderEnd: PropTypes.func,
-    onSelectRange: PropTypes.func,
+    onRangeSelected: PropTypes.func,
     onPeriodChanged: PropTypes.func,
     onYearChanged: PropTypes.func
 };
