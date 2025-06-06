@@ -55,6 +55,8 @@ export default function Calendar(props) {
             // Proper cleanup
             if (calendarRef.current) {
                 calendarRef.current.dispose?.();
+            }
+            if (containerRef.current) {
                 containerRef.current.innerHTML = '';
             }
         };
