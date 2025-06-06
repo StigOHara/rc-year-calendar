@@ -31,7 +31,6 @@ export default function Calendar(props) {
             maxDate: props.maxDate,
             minDate: props.minDate,
             roundRangeLimits: props.roundRangeLimits,
-            selectRange: props.selectRange,
             style: props.style,
             weekStart: props.weekStart,
             numberMonthsDisplayed: props.numberMonthsDisplayed,
@@ -39,14 +38,15 @@ export default function Calendar(props) {
             startDate: props.startDate ?? props.defaultStartDate,
 
             // Event handlers
-            onDayClick: props.onDayClick,
-            onDayContextMenu: props.onDayContextMenu,
-            onDayEnter: props.onDayEnter,
-            onDayLeave: props.onDayLeave,
-            onRenderEnd: props.onRenderEnd,
-            onSelectRange: props.onSelectRange,
-            onPeriodChanged: props.onPeriodChanged,
-            onYearChanged: props.onYearChanged
+            clickDay: props.onDayClick,
+            dayContextMenu: props.onDayContextMenu,
+            mouseOnDay: props.onDayEnter,
+            mouseOutDay: props.onDayLeave,
+            renderEnd: props.onRenderEnd,
+            selectRange: props.onRangeSelected,
+            periodChanged: props.onPeriodChanged,
+            yearChanged: props.onYearChanged
+
         };
 
         calendarRef.current = new JsCalendar(containerRef.current, options);
