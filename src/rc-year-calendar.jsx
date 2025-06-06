@@ -5,7 +5,7 @@ import isEqual from 'lodash.isequal';
 
 import 'js-year-calendar/dist/js-year-calendar.css';
 
-export default function Calendar(props) {
+const Calendar = React.forwardRef((props, ref) => {
     const containerRef = useRef(null);
     const calendarRef = useRef(null);
     const prevProps = useRef({});
@@ -46,16 +46,19 @@ export default function Calendar(props) {
             selectRange: props.onRangeSelected,
             periodChanged: props.onPeriodChanged,
             yearChanged: props.onYearChanged
-
         };
 
         calendarRef.current = new JsCalendar(containerRef.current, options);
 
+        // Expose the calendar instance to parent
+        if (typeof ref === 'function') {
+            ref(calendarRef.current);
+        } else if (ref) {
+            ref.current = calendarRef.current;
+        }
+
         return () => {
-            // Proper cleanup
-            if (calendarRef.current) {
-                calendarRef.current.dispose?.();
-            }
+            calendarRef.current?.dispose?.();
             if (containerRef.current) {
                 containerRef.current.innerHTML = '';
             }
@@ -106,7 +109,9 @@ export default function Calendar(props) {
     }, [props]);
 
     return <div ref={containerRef}></div>;
-}
+});
+
+Calendar.displayName = 'Calendar';
 
 Calendar.locales = JsCalendar.locales;
 
@@ -160,3 +165,5 @@ Calendar.propTypes = {
     onPeriodChanged: PropTypes.func,
     onYearChanged: PropTypes.func
 };
+
+export default Calendar;
