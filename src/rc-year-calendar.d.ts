@@ -50,13 +50,11 @@ interface CalendarProps {
     onDayEnter?: (e: MouseEvent, date: Date) => void;
     onDayLeave?: (e: MouseEvent, date: Date) => void;
     onRenderEnd?: () => void;
-    onSelectRange?: (e: { startDate: Date; endDate: Date }) => void;
+    onRangeSelected?: (e: { startDate: Date; endDate: Date }) => void;
     onPeriodChanged?: (e: { startDate: Date; endDate: Date }) => void;
     onYearChanged?: (e: { year: number }) => void;
 }
 
-declare class Calendar extends React.Component<CalendarProps> {
-    static locales: any; // You might want to define a more specific type for locales
-}
+declare const Calendar: React.ForwardRefExoticComponent<CalendarProps & React.RefAttributes<any>>;
 
 export default Calendar;

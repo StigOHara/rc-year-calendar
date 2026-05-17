@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
-    plugins: [react()],
+    plugins: [react({ jsxRuntime: 'classic' })],
     build: {
         lib: {
             entry: path.resolve(__dirname, 'src/rc-year-calendar.jsx'),
@@ -16,7 +16,7 @@ export default defineConfig({
                 globals: {
                     react: 'React',
                     'react-dom': 'ReactDOM',
-          'prop-types': 'PropTypes'
+                    'prop-types': 'PropTypes'
                 }
             }
         }
